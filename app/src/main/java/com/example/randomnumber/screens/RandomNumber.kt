@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
@@ -44,7 +45,7 @@ fun RandomNumber(modifier: Modifier = Modifier) {
 
     var lower by remember { mutableStateOf(0) }
     var lowerString by remember { mutableStateOf(lower.toString()) }
-    val lowerLabel by remember { mutableStateOf( "From") }
+    val lowerLabel by remember { mutableStateOf("From") }
     var higher by remember { mutableStateOf(10) }
     var higherString by remember { mutableStateOf(higher.toString()) }
     val higherLabel by remember { mutableStateOf("To") }
@@ -56,25 +57,25 @@ fun RandomNumber(modifier: Modifier = Modifier) {
     Column(
         modifier
             .fillMaxSize()
-            /*.clickable {
-                i++
-                when (i) {
-                    3 -> {
-                        iTriggered = true
-                    }
-
-                    10 -> {
-                        iError = true
-                        iTriggered = false
-                    }
-
-                    30 -> {
-                        i = 0
-                        iTriggered = false
-                        iError = false
-                    }
+        /*.clickable {
+            i++
+            when (i) {
+                3 -> {
+                    iTriggered = true
                 }
-            }*/,
+
+                10 -> {
+                    iError = true
+                    iTriggered = false
+                }
+
+                30 -> {
+                    i = 0
+                    iTriggered = false
+                    iError = false
+                }
+            }
+        }*/,
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -89,7 +90,7 @@ fun RandomNumber(modifier: Modifier = Modifier) {
     Row(
         modifier
             .fillMaxSize()
-            .padding(horizontal = 12.dp, vertical = 24.dp),
+            .padding(horizontal = 12.dp),
         verticalAlignment = Alignment.Top,
         horizontalArrangement = Arrangement.Center
     ) {

@@ -1,5 +1,6 @@
 package com.example.randomnumber.screens
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -28,6 +29,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -36,6 +38,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.randomnumber.R
+import com.example.randomnumber.logics.ListDialog
 import com.ramcosta.composedestinations.annotation.Destination
 
 @Destination
@@ -45,6 +48,9 @@ fun RandomListItem(modifier: Modifier = Modifier) {
     var newItem by remember { mutableStateOf("") }
     var ranItem by remember { mutableStateOf("") }
     var ran by remember { mutableStateOf(false) }
+    var expand by remember { mutableStateOf(false) }
+
+    val context = LocalContext.current
 
     Row(
         modifier
@@ -67,7 +73,12 @@ fun RandomListItem(modifier: Modifier = Modifier) {
             })
         )
         Spacer(Modifier.width(10.dp))
-        LazyColumn(modifier.weight(0.75f)) {
+        LazyColumn(
+            modifier
+                .weight(0.75f)
+                .clickable {
+                    if (!list.contains("")) expand = true
+                }) {
             items(list.asReversed()) {
                 Text(it, color = MaterialTheme.colorScheme.primary, fontSize = 12.sp)
             }
@@ -114,5 +125,11 @@ fun RandomListItem(modifier: Modifier = Modifier) {
                 ranItem = list.random()
             }
         }) { Icon(Icons.Default.PlayArrow, "", modifier = modifier.size(45.dp, 45.dp)) }
+    }
+    if (expand) {
+        ListDialog(modifier, onDismiss = { expand = false }, onExport = { updatedlist ->
+            list.clear()
+            list.addAll(updatedlist)
+        }, list)
     }
 }

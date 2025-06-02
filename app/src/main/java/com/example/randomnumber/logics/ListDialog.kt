@@ -51,7 +51,7 @@ fun ListDialog(
                     Row(
                         modifier
                             .width(250.dp)
-                            .padding(vertical = 10.dp),
+                            .padding(vertical = 15.dp),
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.Center
                     ) {
@@ -61,7 +61,6 @@ fun ListDialog(
                             }
                             Row {
                                 IconButton(onClick = {
-                                    // Delete item
                                     mutableList.removeAt(index)
                                     expanded.removeAt(index)
                                 }) {
@@ -69,8 +68,11 @@ fun ListDialog(
                                 }
                             }
                         } else {
-                            TextButton(onClick = { expanded[index] = true }) {
-                                Text(item, fontSize = 20.sp)
+                            TextButton(onClick = {
+                                expanded.forEachIndexed { it, _ -> expanded[it] = false }
+                                expanded[index] = true
+                            }) {
+                                Text(item, fontSize = 15.sp)
                             }
                         }
                     }

@@ -120,7 +120,7 @@ fun RandomListItem(modifier: Modifier = Modifier) {
         horizontalArrangement = Arrangement.Center
     ) {
         Button(onClick = {
-            if (!list.contains("")) {
+            if (!list.contains("") || list.isEmpty()) {
                 ran = true
                 ranItem = list.random()
             }

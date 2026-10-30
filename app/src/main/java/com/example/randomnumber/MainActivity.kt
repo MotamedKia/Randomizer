@@ -36,6 +36,7 @@ import com.example.randomnumber.screens.NavGraphs
 import com.example.randomnumber.screens.RandomListItem
 import com.example.randomnumber.screens.destinations.RandomListItemDestination
 import com.example.randomnumber.screens.destinations.RandomNumberDestination
+import com.orhanobut.hawk.Hawk
 import com.ramcosta.composedestinations.DestinationsNavHost
 import com.ramcosta.composedestinations.navigation.navigate
 
@@ -49,8 +50,12 @@ class MainActivity : ComponentActivity() {
             val activity = LocalActivity.current
             var showNavDialog by remember { mutableStateOf(false) }
             val navController = rememberNavController()
+
+            Hawk.init(context).build()
+
             RandomNumberTheme {
-                Scaffold(modifier = Modifier.fillMaxSize(),
+                Scaffold(
+                    modifier = Modifier.fillMaxSize(),
                     topBar = {
                         CenterAlignedTopAppBar(title = {
                             Text("")

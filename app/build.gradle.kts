@@ -69,4 +69,6 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
     implementation("io.github.raamcosta.compose-destinations:core:1.9.63")	// destination
     ksp("io.github.raamcosta.compose-destinations:ksp:1.9.63")	// destination
+
+    implementation("com.orhanobut:hawk:2.0.1")    // hawk library
 }

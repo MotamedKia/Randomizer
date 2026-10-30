@@ -1,5 +1,6 @@
 package com.example.randomnumber.screens
 
+import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -15,9 +16,12 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -27,8 +31,10 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
@@ -38,17 +44,21 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.randomnumber.R
+import com.example.randomnumber.logics.FavListsDialog
 import com.example.randomnumber.logics.ListDialog
+import com.orhanobut.hawk.Hawk
 import com.ramcosta.composedestinations.annotation.Destination
+import kotlin.collections.emptyList
 
 @Destination
 @Composable
 fun RandomListItem(modifier: Modifier = Modifier) {
-    val list = remember { mutableStateListOf("") }
+    var list = remember { mutableStateListOf("") } as MutableList<String>
     var newItem by remember { mutableStateOf("") }
     var ranItem by remember { mutableStateOf("") }
     var ran by remember { mutableStateOf(false) }
     var expand by remember { mutableStateOf(false) }
+    var expandFav by remember { mutableStateOf(false) }
 
     val context = LocalContext.current
 
@@ -72,15 +82,31 @@ fun RandomListItem(modifier: Modifier = Modifier) {
                 newItem = ""
             })
         )
-        Spacer(Modifier.width(10.dp))
-        LazyColumn(
-            modifier
-                .weight(0.75f)
-                .clickable {
-                    if (!list.contains("")) expand = true
-                }) {
-            items(list.asReversed()) {
-                Text(it, color = MaterialTheme.colorScheme.primary, fontSize = 12.sp)
+        if (list.isEmpty() || list.contains("")) {
+            Spacer(Modifier.width(10.dp))
+            IconButton(
+                modifier = modifier
+                    .weight(0.75f),
+                onClick = {
+                    val dbList: List<List<String>> = Hawk.get("FavoriteListOfStrings", emptyList())
+                    if (dbList.isEmpty()) {
+                        Toast.makeText(context, "No Favorite List Found", Toast.LENGTH_SHORT).show()
+                    }
+                    expandFav = true
+                },
+                colors = IconButtonDefaults.iconButtonColors(contentColor = MaterialTheme.colorScheme.primary)
+            ) { Icon(Icons.Default.MoreVert, "", modifier.rotate(90f)) }
+        } else {
+            Spacer(Modifier.width(10.dp))
+            LazyColumn(
+                modifier
+                    .weight(0.75f)
+                    .clickable {
+                        if (!list.contains("")) expand = true
+                    }) {
+                items(list.asReversed()) {
+                    Text(it, color = MaterialTheme.colorScheme.primary, fontSize = 12.sp)
+                }
             }
         }
     }
@@ -127,9 +153,48 @@ fun RandomListItem(modifier: Modifier = Modifier) {
         }) { Icon(Icons.Default.PlayArrow, "", modifier = modifier.size(45.dp, 45.dp)) }
     }
     if (expand) {
+        val dbList: List<List<String>> = Hawk.get("FavoriteListOfStrings", emptyList())
+        val faved = dbList.toMutableList().contains(list)
         ListDialog(modifier, onDismiss = { expand = false }, onExport = { updatedlist ->
             list.clear()
             list.addAll(updatedlist)
-        }, list)
+        }, {
+            val dbList: List<List<String>> = Hawk.get("FavoriteListOfStrings", emptyList())
+            val finalList = dbList.toMutableList()
+            finalList.add(list.toList())
+            Hawk.put("FavoriteListOfStrings", finalList)
+//            Toast.makeText(context, "New List Added", Toast.LENGTH_SHORT).show()
+        }, {
+            val dbList: List<List<String>> = Hawk.get("FavoriteListOfStrings", emptyList())
+            val finalList = dbList.toMutableList()
+            finalList.remove(list.toList())
+            Hawk.put("FavoriteListOfStrings", finalList)
+//            Toast.makeText(context, "This List Was Removed", Toast.LENGTH_SHORT).show()
+        }, {
+            val dbList: List<List<String>> = Hawk.get("FavoriteListOfStrings", emptyList())
+            if (dbList.isEmpty()) {
+                Toast.makeText(context, "No Favorite List Found", Toast.LENGTH_SHORT).show()
+            } else {
+                expandFav = true
+            }
+        }, faved, list)
+    }
+    if (expandFav) {
+        FavListsDialog(
+            modifier,
+            onDismiss = { expandFav = false },
+            context,
+            onDelete = { thisItem ->
+                val dbList: List<List<String>> = Hawk.get("FavoriteListOfStrings", emptyList())
+                val finalList = dbList.toMutableList()
+                finalList.remove(thisItem.toList())
+                Hawk.put("FavoriteListOfStrings", finalList)
+//                Toast.makeText(context, "This List Was Removed", Toast.LENGTH_SHORT).show()
+            },
+            onConfirm = {
+                list.clear()
+                list.addAll(it)
+                expandFav = false
+            })
     }
 }

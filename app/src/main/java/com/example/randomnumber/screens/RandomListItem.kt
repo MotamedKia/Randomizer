@@ -46,6 +46,8 @@ import androidx.compose.ui.unit.sp
 import com.example.randomnumber.R
 import com.example.randomnumber.logics.FavListsDialog
 import com.example.randomnumber.logics.ListDialog
+import com.example.randomnumber.logics.UpdateListStringDialog
+import com.example.randomnumber.logics.checkIfNew
 import com.orhanobut.hawk.Hawk
 import com.ramcosta.composedestinations.annotation.Destination
 import kotlin.collections.emptyList
@@ -59,6 +61,7 @@ fun RandomListItem(modifier: Modifier = Modifier) {
     var ran by remember { mutableStateOf(false) }
     var expand by remember { mutableStateOf(false) }
     var expandFav by remember { mutableStateOf(false) }
+    var mergeQuest by remember { mutableStateOf(false) }
 
     val context = LocalContext.current
 
@@ -161,8 +164,21 @@ fun RandomListItem(modifier: Modifier = Modifier) {
         }, {
             val dbList: List<List<String>> = Hawk.get("FavoriteListOfStrings", emptyList())
             val finalList = dbList.toMutableList()
-            finalList.add(list.toList())
-            Hawk.put("FavoriteListOfStrings", finalList)
+            when (checkIfNew(list, finalList)) {
+                1 -> {
+                    finalList.add(list.toList())
+                    Hawk.put("FavoriteListOfStrings", finalList)
+                }
+
+                2 -> {
+                    mergeQuest = true
+                }
+
+                3 -> {
+                    Toast.makeText(context, "This list is already a favorite", Toast.LENGTH_SHORT)
+                        .show()
+                }
+            }
 //            Toast.makeText(context, "New List Added", Toast.LENGTH_SHORT).show()
         }, {
             val dbList: List<List<String>> = Hawk.get("FavoriteListOfStrings", emptyList())
@@ -195,6 +211,37 @@ fun RandomListItem(modifier: Modifier = Modifier) {
                 list.clear()
                 list.addAll(it)
                 expandFav = false
+            })
+    }
+    if (mergeQuest) {
+        UpdateListStringDialog(
+            modifier,
+            onDismiss = { mergeQuest = false },
+            yes = {
+                val dbList: List<List<String>> = Hawk.get("FavoriteListOfStrings", emptyList())
+                val finalList = dbList.toMutableList()
+
+                val existingIndex = finalList.indexOfFirst {
+                    list.toSet().intersect(it.toSet()).isNotEmpty()
+                }
+
+                if (existingIndex != -1) {
+                    finalList[existingIndex] = list.toList()
+                    Hawk.put("FavoriteListOfStrings", finalList)
+                    Toast.makeText(
+                        context,
+                        "Favorite list updated!",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+                mergeQuest = false
+            },
+            no = {
+                val dbList: List<List<String>> = Hawk.get("FavoriteListOfStrings", emptyList())
+                val finalList = dbList.toMutableList()
+                finalList.add(list.toList())
+                Hawk.put("FavoriteListOfStrings", finalList)
+                mergeQuest = false
             })
     }
 }

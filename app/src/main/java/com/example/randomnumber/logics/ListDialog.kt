@@ -39,7 +39,7 @@ fun ListDialog(
     onDismiss: () -> Unit,
     onExport: (List<String>) -> Unit,
     onAddFave: (List<String>) -> Unit,
-    onRemoveFave: (List<String>) -> Unit,
+    onRemoveFave: (List<String>) -> Boolean,
     onExpandFave: () -> Unit,
     faved: Boolean,
     list: List<String>,
@@ -66,11 +66,11 @@ fun ListDialog(
                     ) { Icon(Icons.Default.MoreVert, "", modifier.rotate(90f)) }
                     IconButton({
                         if (!faving) {
-                            onAddFave(list)
+                            onAddFave(mutableList)
                             faving = true
                         } else {
-                            onRemoveFave(list)
-                            faving = false
+
+                            faving = !onRemoveFave(mutableList)
                         }
                     }) {
                         Icon(

@@ -158,15 +158,16 @@ fun RandomListItem(modifier: Modifier = Modifier) {
     if (expand) {
         val dbList: List<List<String>> = Hawk.get("FavoriteListOfStrings", emptyList())
         val faved = dbList.toMutableList().contains(list)
+        var alreadyFave = false
         ListDialog(modifier, onDismiss = { expand = false }, onExport = { updatedlist ->
             list.clear()
             list.addAll(updatedlist)
-        }, {
+        }, { it ->
             val dbList: List<List<String>> = Hawk.get("FavoriteListOfStrings", emptyList())
             val finalList = dbList.toMutableList()
-            when (checkIfNew(list, finalList)) {
+            when (checkIfNew(it, finalList)) {
                 1 -> {
-                    finalList.add(list.toList())
+                    finalList.add(it.toList())
                     Hawk.put("FavoriteListOfStrings", finalList)
                 }
 
@@ -177,14 +178,25 @@ fun RandomListItem(modifier: Modifier = Modifier) {
                 3 -> {
                     Toast.makeText(context, "This list is already a favorite", Toast.LENGTH_SHORT)
                         .show()
+                    alreadyFave = true
                 }
             }
 //            Toast.makeText(context, "New List Added", Toast.LENGTH_SHORT).show()
         }, {
-            val dbList: List<List<String>> = Hawk.get("FavoriteListOfStrings", emptyList())
-            val finalList = dbList.toMutableList()
-            finalList.remove(list.toList())
-            Hawk.put("FavoriteListOfStrings", finalList)
+            if (!alreadyFave) {
+                val dbList: List<List<String>> = Hawk.get("FavoriteListOfStrings", emptyList())
+                val finalList = dbList.toMutableList()
+                finalList.remove(it.toList())
+                Hawk.put("FavoriteListOfStrings", finalList)
+                true
+            } else {
+                Toast.makeText(
+                    context,
+                    "can't remove a list from here",
+                    Toast.LENGTH_SHORT
+                ).show()
+                false
+            }
 //            Toast.makeText(context, "This List Was Removed", Toast.LENGTH_SHORT).show()
         }, {
             val dbList: List<List<String>> = Hawk.get("FavoriteListOfStrings", emptyList())

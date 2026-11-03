@@ -27,6 +27,7 @@ fun NavigationDialog(
             ) {
                 TextButton(onClick = { onNav(1) }) { Text("Random Number") }
                 TextButton(onClick = { onNav(2) }) { Text("Random Text") }
+                TextButton(onClick = { onNav(3) }) { Text("Roll a Dice") }
             }
         }
     }

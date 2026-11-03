@@ -1,6 +1,8 @@
 package com.example.randomnumber.screens
 
 import android.widget.Toast
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -17,15 +19,20 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.Button
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.rememberNavController
+import com.example.randomnumber.R
 import com.example.randomnumber.screens.destinations.DiceRollerDestination
 import com.example.randomnumber.screens.destinations.DiceRollerDestination.invoke
 import com.example.randomnumber.screens.destinations.RandomListItemDestination
@@ -50,22 +57,30 @@ fun HomeScreen(modifier: Modifier = Modifier, destinationsNavigator: Destination
                 3 -> "Roll a Die"
                 else -> "Whaa"
             }
-            OutlinedCard(modifier.clickable(onClick = {
-                when (it) {
-                    1 -> destinationsNavigator.navigate(RandomNumberDestination)
-                    2 -> destinationsNavigator.navigate(RandomListItemDestination)
-                    3 -> destinationsNavigator.navigate(DiceRollerDestination())
-                    else -> Toast.makeText(context, "Invalid", Toast.LENGTH_SHORT)
-                        .show()
-                }
-            })) {
+            OutlinedCard(modifier
+                .padding(5.dp)
+                .clickable(onClick = {
+                    when (it) {
+                        1 -> destinationsNavigator.navigate(RandomNumberDestination)
+                        2 -> destinationsNavigator.navigate(RandomListItemDestination)
+                        3 -> destinationsNavigator.navigate(DiceRollerDestination())
+                        else -> Toast.makeText(context, "Invalid", Toast.LENGTH_SHORT)
+                            .show()
+                    }
+                }), border = BorderStroke(width = 2.dp, color = MaterialTheme.colorScheme.secondary)) {
                 Column(
                     modifier.fillMaxSize(),
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Spacer(modifier.height(10.dp))
-                    Icon(Icons.Default.Home, "", Modifier.size(80.dp))
+                    Image(
+                        painter = painterResource(id = R.drawable.randomizer_logo_png),
+                        contentDescription = "My Image",
+                        modifier = Modifier
+                            .size(150.dp),
+                        contentScale = ContentScale.Crop
+                    )
                     Spacer(modifier.height(8.dp))
                     Text(destineName)
                     Spacer(modifier.height(10.dp))

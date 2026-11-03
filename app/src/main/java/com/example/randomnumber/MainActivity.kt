@@ -15,6 +15,7 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.Button
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -36,6 +37,7 @@ import com.example.compose.RandomNumberTheme
 import com.example.randomnumber.logics.NavigationDialog
 import com.example.randomnumber.screens.NavGraphs
 import com.example.randomnumber.screens.destinations.DiceRollerDestination
+import com.example.randomnumber.screens.destinations.HomeScreenDestination
 import com.example.randomnumber.screens.destinations.RandomListItemDestination
 import com.example.randomnumber.screens.destinations.RandomNumberDestination
 import com.orhanobut.hawk.Hawk
@@ -68,6 +70,13 @@ class MainActivity : ComponentActivity() {
                             }) {
                                 Icon(
                                     Icons.Default.Menu,
+                                    ""
+                                )
+                            }
+                        }, actions = {
+                            IconButton(onClick = { navController.navigate(HomeScreenDestination) }) {
+                                Icon(
+                                    Icons.Default.Home,
                                     ""
                                 )
                             }

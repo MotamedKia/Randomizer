@@ -81,7 +81,7 @@ class MainActivity : ComponentActivity() {
                             when (opt) {
                                 1 -> navController.navigate(RandomNumberDestination)
                                 2 -> navController.navigate(RandomListItemDestination)
-                                3 -> navController.navigate(DiceRollerDestination)
+                                3 -> navController.navigate(DiceRollerDestination())
                                 else -> Toast.makeText(context, "Invalid", Toast.LENGTH_SHORT)
                                     .show()
                             }

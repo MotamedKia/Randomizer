@@ -32,7 +32,7 @@ import androidx.compose.ui.unit.sp
 import com.example.randomnumber.R
 import com.ramcosta.composedestinations.annotation.Destination
 
-@Destination(start = true)
+@Destination
 @Composable
 fun RandomNumber(modifier: Modifier = Modifier) {
     /*var i by remember { mutableStateOf(0) }

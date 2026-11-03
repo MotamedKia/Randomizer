@@ -79,7 +79,7 @@ fun Dice(
                 modifier = Modifier
                     .fillMaxSize()
                     .background(
-                        color = Color(0xFFFFDAD6),
+                        color = Color(0xFF805611),
                         shape = RoundedCornerShape(8.dp)
                     )
             )
@@ -121,21 +121,21 @@ fun Dice(
 
                 // Polygon background
                 drawPath(
-                    path = polygon, color = Color(0xFFFFDAD6)
+                    path = polygon, color = Color(0xFF805611)
 //                    color = MaterialTheme.colorScheme.primaryContainer
                 )
 
                 // Polygon outline
                 drawPath(
                     path = polygon,
-                    color = Color(0xFFFFDAD6),
-                    style = Stroke(width = 3.dp.toPx())
+                    color = Color(0xFF805611),
+                    style = Stroke(width = 8.dp.toPx())
                 )
 
                 // Internal facets
                 vertices.forEach { vertex ->
                     drawLine(
-                        color = Color(0xFFFFDAD6),
+                        color = Color(0xFF805611),
                         start = center,
                         end = vertex,
                         strokeWidth = 2.dp.toPx()
@@ -150,7 +150,7 @@ fun Dice(
             modifier = Modifier.alpha(alpha),
             fontSize = 32.sp,
             fontWeight = FontWeight.Bold,
-            color = Color(0xFF18120B)
+            color = Color(0xFFFFFFFF)
         )
     }
 }

@@ -148,7 +148,7 @@ fun Dice(
         Text(
             text = result?.toString() ?: "",
             modifier = Modifier.alpha(alpha),
-            fontSize = 32.sp,
+            fontSize = 52.sp,
             fontWeight = FontWeight.Bold,
             color = Color(0xFFFFFFFF)
         )

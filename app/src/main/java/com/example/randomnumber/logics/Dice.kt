@@ -80,7 +80,7 @@ fun Dice(
                     .fillMaxSize()
                     .background(
                         color = Color(0xFFFFDAD6),
-                        shape = RoundedCornerShape(18.dp)
+                        shape = RoundedCornerShape(8.dp)
                     )
             )
         }

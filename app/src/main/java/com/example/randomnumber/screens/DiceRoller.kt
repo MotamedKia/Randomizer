@@ -2,10 +2,14 @@ package com.example.randomnumber.screens
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -22,6 +26,7 @@ import com.ramcosta.composedestinations.annotation.Destination
 @Composable
 fun DiceRoller(modifier: Modifier = Modifier) {
     var isRolling by remember { mutableStateOf(false) }
+    var cheched by remember { mutableStateOf(false) }
 
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -30,19 +35,28 @@ fun DiceRoller(modifier: Modifier = Modifier) {
     ) {
 
         Dice(
-            sides = 20,
+            sides = if (!cheched) 6 else 20,
             isRolling = isRolling
         )
 
         Spacer(modifier = Modifier.height(24.dp))
-
-        Button(
-            onClick = {
-                isRolling = true
-            },
-            enabled = !isRolling
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center
         ) {
-            Text("Roll Dice")
+            Switch(
+                checked = cheched,
+                onCheckedChange = { cheched = !cheched }
+            )
+            Spacer(modifier = Modifier.width(15.dp))
+            Button(
+                onClick = {
+                    isRolling = true
+                },
+                enabled = !isRolling
+            ) {
+                Text("Roll Dice")
+            }
         }
     }
 }

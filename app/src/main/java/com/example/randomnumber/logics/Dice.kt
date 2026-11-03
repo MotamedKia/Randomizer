@@ -81,7 +81,7 @@ fun Dice(
                     .background(
                         color = Color(0xFF805611),
                         shape = RoundedCornerShape(8.dp)
-                    )
+                    ).size(width = 40.dp, height = 40.dp)
             )
         }
 
@@ -129,7 +129,7 @@ fun Dice(
                 drawPath(
                     path = polygon,
                     color = Color(0xFF805611),
-                    style = Stroke(width = 8.dp.toPx())
+                    style = Stroke(width = 40.dp.toPx())
                 )
 
                 // Internal facets

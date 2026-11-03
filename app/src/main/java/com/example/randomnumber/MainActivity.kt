@@ -34,6 +34,7 @@ import com.example.compose.RandomNumberTheme
 import com.example.randomnumber.logics.NavigationDialog
 import com.example.randomnumber.screens.NavGraphs
 import com.example.randomnumber.screens.RandomListItem
+import com.example.randomnumber.screens.destinations.DiceRollerDestination
 import com.example.randomnumber.screens.destinations.RandomListItemDestination
 import com.example.randomnumber.screens.destinations.RandomNumberDestination
 import com.orhanobut.hawk.Hawk
@@ -80,6 +81,7 @@ class MainActivity : ComponentActivity() {
                             when (opt) {
                                 1 -> navController.navigate(RandomNumberDestination)
                                 2 -> navController.navigate(RandomListItemDestination)
+                                3 -> navController.navigate(DiceRollerDestination)
                                 else -> Toast.makeText(context, "Invalid", Toast.LENGTH_SHORT)
                                     .show()
                             }

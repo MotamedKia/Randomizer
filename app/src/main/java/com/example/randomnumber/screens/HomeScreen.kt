@@ -49,7 +49,7 @@ fun HomeScreen(modifier: Modifier = Modifier, destinationsNavigator: Destination
     val context = LocalContext.current
     val destines = listOf(1, 2, 3)
 
-    LazyVerticalGrid(columns = GridCells.Fixed(2), contentPadding = PaddingValues(10.dp)) {
+    LazyVerticalGrid(columns = GridCells.Fixed(2), contentPadding = PaddingValues(10.dp), modifier = modifier.fillMaxSize()) {
         items(destines) {
             val destineName = when (it) {
                 1 -> "Random Number"
@@ -78,7 +78,7 @@ fun HomeScreen(modifier: Modifier = Modifier, destinationsNavigator: Destination
                         painter = painterResource(id = R.drawable.randomizer_logo_png),
                         contentDescription = "My Image",
                         modifier = Modifier
-                            .size(150.dp),
+                            .size(130.dp),
                         contentScale = ContentScale.Crop
                     )
                     Spacer(modifier.height(8.dp))

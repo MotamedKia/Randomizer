@@ -49,7 +49,11 @@ fun HomeScreen(modifier: Modifier = Modifier, destinationsNavigator: Destination
     val context = LocalContext.current
     val destines = listOf(1, 2, 3)
 
-    LazyVerticalGrid(columns = GridCells.Fixed(2), contentPadding = PaddingValues(10.dp), modifier = modifier.fillMaxSize()) {
+    LazyVerticalGrid(
+        columns = GridCells.Fixed(2),
+        contentPadding = PaddingValues(10.dp),
+        modifier = modifier.fillMaxSize()
+    ) {
         items(destines) {
             val destineName = when (it) {
                 1 -> "Random Number"
@@ -57,17 +61,20 @@ fun HomeScreen(modifier: Modifier = Modifier, destinationsNavigator: Destination
                 3 -> "Roll a Die"
                 else -> "Whaa"
             }
-            OutlinedCard(modifier
-                .padding(5.dp)
-                .clickable(onClick = {
-                    when (it) {
-                        1 -> destinationsNavigator.navigate(RandomNumberDestination)
-                        2 -> destinationsNavigator.navigate(RandomListItemDestination)
-                        3 -> destinationsNavigator.navigate(DiceRollerDestination())
-                        else -> Toast.makeText(context, "Invalid", Toast.LENGTH_SHORT)
-                            .show()
-                    }
-                }), border = BorderStroke(width = 2.dp, color = MaterialTheme.colorScheme.secondary)) {
+            OutlinedCard(
+                modifier
+                    .padding(5.dp)
+                    .clickable(onClick = {
+                        when (it) {
+                            1 -> destinationsNavigator.navigate(RandomNumberDestination)
+                            2 -> destinationsNavigator.navigate(RandomListItemDestination)
+                            3 -> destinationsNavigator.navigate(DiceRollerDestination())
+                            else -> Toast.makeText(context, "Invalid", Toast.LENGTH_SHORT)
+                                .show()
+                        }
+                    }),
+                border = BorderStroke(width = 2.dp, color = MaterialTheme.colorScheme.secondary)
+            ) {
                 Column(
                     modifier.fillMaxSize(),
                     verticalArrangement = Arrangement.Center,
@@ -75,7 +82,12 @@ fun HomeScreen(modifier: Modifier = Modifier, destinationsNavigator: Destination
                 ) {
                     Spacer(modifier.height(10.dp))
                     Image(
-                        painter = painterResource(id = R.drawable.randomizer_logo_png),
+                        painter = when (it) {
+                            1 -> painterResource(id = R.drawable.number_four)
+                            2 -> painterResource(id = R.drawable.word_four)
+                            3 -> painterResource(id = R.drawable.dice_four)
+                            else -> painterResource(id = R.drawable.randomizer_logo_png)
+                        },
                         contentDescription = "My Image",
                         modifier = Modifier
                             .size(130.dp),

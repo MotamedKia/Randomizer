@@ -167,7 +167,12 @@ fun RandomListItem(modifier: Modifier = Modifier) {
                         ranItem = uniqueItem
                         uniqueList.remove(uniqueItem)
                     } else {
-                        unique = !unique
+//                        unique = !unique
+                        uniqueList.addAll(list)
+//                        uniqueList.remove("")
+                        val uniqueItem = uniqueList.random()
+                        ranItem = uniqueItem
+                        uniqueList.remove(uniqueItem)
                     }
                 }
             }
@@ -180,6 +185,10 @@ fun RandomListItem(modifier: Modifier = Modifier) {
         ListDialog(modifier, onDismiss = { expand = false }, onExport = { updatedlist ->
             list.clear()
             list.addAll(updatedlist)
+            if (unique) {
+                uniqueList.clear()
+                uniqueList.addAll(list)
+            }
             firstIn = true
         }, { it ->
             val dbList: List<List<String>> = Hawk.get("FavoriteListOfStrings", emptyList())
@@ -241,6 +250,10 @@ fun RandomListItem(modifier: Modifier = Modifier) {
             onConfirm = {
                 list.clear()
                 list.addAll(it)
+                if (unique) {
+                    uniqueList.clear()
+                    uniqueList.addAll(list)
+                }
                 firstIn = true
                 expandFav = false
             })

@@ -24,6 +24,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -55,13 +56,17 @@ import kotlin.collections.emptyList
 @Destination
 @Composable
 fun RandomListItem(modifier: Modifier = Modifier) {
-    var list = remember { mutableStateListOf("") } as MutableList<String>
+    val list = remember { mutableStateListOf("") } as MutableList<String>
     var newItem by remember { mutableStateOf("") }
     var ranItem by remember { mutableStateOf("") }
     var ran by remember { mutableStateOf(false) }
     var expand by remember { mutableStateOf(false) }
     var expandFav by remember { mutableStateOf(false) }
     var mergeQuest by remember { mutableStateOf(false) }
+
+    val uniqueList = remember { mutableStateListOf("") } as MutableList<String>
+    var unique by remember { mutableStateOf(false) }
+    var firstIn by remember { mutableStateOf(false) }
 
     val context = LocalContext.current
 
@@ -82,6 +87,8 @@ fun RandomListItem(modifier: Modifier = Modifier) {
             keyboardActions = KeyboardActions(onDone = {
                 list.add(newItem)
                 list.remove("")
+                firstIn = true
+                unique = false
                 newItem = ""
             })
         )
@@ -150,8 +157,19 @@ fun RandomListItem(modifier: Modifier = Modifier) {
     ) {
         Button(onClick = {
             if (!list.contains("") || list.isEmpty()) {
-                ran = true
-                ranItem = list.random()
+                if (!unique) {
+                    ran = true
+                    ranItem = list.random()
+                } else {
+                    ran = true
+                    if (uniqueList.isNotEmpty()) {
+                        val uniqueItem = uniqueList.random()
+                        ranItem = uniqueItem
+                        uniqueList.remove(uniqueItem)
+                    } else {
+                        unique = !unique
+                    }
+                }
             }
         }) { Icon(Icons.Default.PlayArrow, "", modifier = modifier.size(45.dp, 45.dp)) }
     }
@@ -162,6 +180,7 @@ fun RandomListItem(modifier: Modifier = Modifier) {
         ListDialog(modifier, onDismiss = { expand = false }, onExport = { updatedlist ->
             list.clear()
             list.addAll(updatedlist)
+            firstIn = true
         }, { it ->
             val dbList: List<List<String>> = Hawk.get("FavoriteListOfStrings", emptyList())
             val finalList = dbList.toMutableList()
@@ -222,6 +241,7 @@ fun RandomListItem(modifier: Modifier = Modifier) {
             onConfirm = {
                 list.clear()
                 list.addAll(it)
+                firstIn = true
                 expandFav = false
             })
     }
@@ -255,5 +275,25 @@ fun RandomListItem(modifier: Modifier = Modifier) {
                 Hawk.put("FavoriteListOfStrings", finalList)
                 mergeQuest = false
             })
+    }
+    if (firstIn) {
+        Column(
+            Modifier
+                .fillMaxSize()
+                .padding(horizontal = 20.dp, vertical = 5.dp),
+            verticalArrangement = Arrangement.Bottom,
+            horizontalAlignment = Alignment.Start
+        ) {
+            Switch(unique, {
+                unique = !unique
+                uniqueList.addAll(list)
+                uniqueList.remove("")
+            })
+            Text(
+                if (unique) "unique" else "repetitive",
+                color = if (!unique) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.primary,
+                fontSize = 12.sp
+            )
+        }
     }
 }

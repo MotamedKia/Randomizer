@@ -61,6 +61,30 @@ fun HomeScreen(modifier: Modifier = Modifier, destinationsNavigator: Destination
                 3 -> "Roll a Die"
                 else -> "Whaa"
             }
+            val ranImageList = (0..3).random()
+            val ranImageNumber = (0..3).random()
+            val ranImageDice = (0..3).random()
+            val imageList = when (ranImageList) {
+                0 -> painterResource(id = R.drawable.word_four)
+                1 -> painterResource(id = R.drawable.word_three)
+                2 -> painterResource(id = R.drawable.word_two)
+                3 -> painterResource(id = R.drawable.word_one)
+                else -> painterResource(id = R.drawable.randomizer_logo_png)
+            }
+            val imageNumber = when (ranImageNumber) {
+                0 -> painterResource(id = R.drawable.number_four)
+                1 -> painterResource(id = R.drawable.number_three)
+                2 -> painterResource(id = R.drawable.number_two)
+                3 -> painterResource(id = R.drawable.number_one)
+                else -> painterResource(id = R.drawable.randomizer_logo_png)
+            }
+            val imageDice = when (ranImageDice) {
+                0 -> painterResource(id = R.drawable.dice_four)
+                1 -> painterResource(id = R.drawable.dice_three)
+                2 -> painterResource(id = R.drawable.dice_two)
+                3 -> painterResource(id = R.drawable.dice_one)
+                else -> painterResource(id = R.drawable.randomizer_logo_png)
+            }
             OutlinedCard(
                 modifier
                     .padding(5.dp)
@@ -83,9 +107,9 @@ fun HomeScreen(modifier: Modifier = Modifier, destinationsNavigator: Destination
                     Spacer(modifier.height(10.dp))
                     Image(
                         painter = when (it) {
-                            1 -> painterResource(id = R.drawable.number_four)
-                            2 -> painterResource(id = R.drawable.word_four)
-                            3 -> painterResource(id = R.drawable.dice_four)
+                            1 -> imageNumber
+                            2 -> imageList
+                            3 -> imageDice
                             else -> painterResource(id = R.drawable.randomizer_logo_png)
                         },
                         contentDescription = "My Image",

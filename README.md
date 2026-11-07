@@ -18,3 +18,5 @@
 #### *Try this Android app and give feedback*
 #### **Help me make it perfect**
 #
+### Download the apk here 👇
+[Android version](https://github.com/MotamedKia/Randomizer/releases/download/apk/app-release.apk)
